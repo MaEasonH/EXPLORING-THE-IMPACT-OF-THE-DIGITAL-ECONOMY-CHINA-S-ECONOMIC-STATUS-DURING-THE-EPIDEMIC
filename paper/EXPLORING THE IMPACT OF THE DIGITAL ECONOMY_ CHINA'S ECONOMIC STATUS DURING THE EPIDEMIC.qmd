@@ -1,0 +1,311 @@
+---
+title: "EXPLORING THE IMPACT OF THE DIGITAL ECONOMY: CHINA'S ECONOMIC STATUS DURING THE EPIDEMIC"
+subtitle: "Analyzing Non-traditional Economic Logic From The Perspective Of Digital Economy"
+author: 
+  - HengMa
+thanks: "Code and data are available at: https://github.com/MaEasonH/EXPLORING-THE-IMPACT-OF-THE-DIGITAL-ECONOMY-CHINA-S-ECONOMIC-STATUS-DURING-THE-EPIDEMIC"
+date: today
+date-format: long
+abstract: "In the shadow of 2020's unprecedented global upheaval, the study at hand delves into the transformative power of China's digital economy amidst the COVID-19 pandemic. By harnessing the National Bureau of Statistics of China's data on economic indicators during the epidemic, along with mobile internet traffic as a proxy for digital engagement, we employ OLS analysis to scrutinize the digital economy's role as a stabilizing force against economic tumult. The research uncovers a critical finding: the digital economy not only counterbalances the traditional economy's decline but also catalyzes its resurgence during crises . This insight is crucial, highlighting the digital economy as a buffer and a bridge to recovery, illustrating a paradigm shift in economic behavior that not only sustains but also advances growth in dire times. As we navigate through the remnants of the epidemic's economic shockwaves, Understanding this emergent economic model can help us construct an economic logic understanding of special periods, so as to face social turmoil more calmly."
+format: pdf
+number-sections: true
+bibliography: references.bib
+toc: true
+editor: 
+  markdown: 
+    wrap: sentence
+---
+
+```{r}
+#| include: false
+#| warning: false
+#| message: false
+
+if(!require(ggplot2)){install.packages('ggplot2', dependencies = TRUE)}
+if(!require(dplyr)){install.packages('dplyr', dependencies = TRUE)}
+if(!require(readr)){install.packages('readr', dependencies = TRUE)}
+if(!require(knitr)){install.packages('knitr', dependencies = TRUE)}
+if(!require(jtools)){install.packages('jtools', dependencies = TRUE)}
+if(!require(tidyverse)){install.packages('tidyverse', dependencies = TRUE)}
+if(!require(knitr)){install.packages('knitr', dependencies = TRUE)}
+if(!require(beepr)){install.packages('beepr', dependencies = TRUE)}
+if(!require(modelsummary)){install.packages('modelsummary', dependencies = TRUE)}
+if(!require(kableExtra)){install.packages('kableExtra', dependencies = TRUE)}
+if(!require(xtable)){install.packages('xtable', dependencies = TRUE)}
+if(!require(flextable)){install.packages('flextable', dependencies = TRUE)}
+if(!require(MASS)){install.packages('MASS', dependencies = TRUE)}
+library(ggplot2)
+library(readr)
+library(beepr)
+library(broom)
+library(broom.mixed)
+library(knitr)
+library(modelsummary)
+library(purrr)
+library(rstanarm)
+library(testthat)
+library(tidyverse)
+library(kableExtra)
+library(xtable)
+library(flextable)
+library(MASS)
+```
+
+# introduction
+
+As the year 2020 unfolds, the global community is grappling with the COVID-19 pandemic’s devastating effects.China, seeking to mitigate the spread of the virus, has swiftly implemented strategies including isolation and control of population movements.(@jia2020empirical)these actions have been successful in curbing the viral outbreak but have also had a significant impact on the nation’s economic progression.During the initial three months of 2020, China’s economic performance experienced a downturn, with its Gross Domestic Product (GDP) shrinking by 6.8% compared to the previous year(@zhang2021study), signaling an economic contraction.The tangible economy faced considerable challenges under these circumstances. Amidst this situation, the advancement of digital technologies such as artificial intelligence, cloud services, and extensive data analytics has flourished, promoting a digital economic surge.(@wu2023investigating)These technological innovations have enabled individuals to manage work and leisure activities from the confines of their homes, fostering the shift towards remote operations.Furthermore, these digital tools have facilitated government efforts in closely monitoring public movement patterns, thereby enhancing the efficiency of epidemic containment measures.Such digital capabilities have also supported manufacturing and other industrial activities in resuming operations, thereby fostering a recuperative effect on the tangible economy and acting as a catalyst for its revival.With the advent of a new wave of advancements in information technology, the digital economy is witnessing substantial growth, increasingly becoming a pivotal force behind economic advancement.However, the critical question remains: Can the burgeoning digital economy contribute to optimizing the structural framework of China's economy?And what will be its impact on China's economic landscape in the aftermath of the epidemic? Delving into these queries holds immense empirical value.
+
+This article collected from the National Bureau of Statistic of China China’s epidemic period and CPI as dependent variables, economic factors related to it as control variables, and mobile traffic usage data as the main dependent variables. By using OLS analysis techniques, we analyzed the development of the digital economy during the epidemic in China to verify whether the digital economy has the role of regulating the economy in a turbulent social environment. It is assumed that the digital economy will bring the opposite impact to the traditional economy during the epidemic and will stabilize the current turbulent economic environment. The results proved the conjecture that the digital economy has a stabilizing effect on the economy during the epidemic. Based on the logic of the role of the digital economy, this article focuses on analyzing whether there is an anti-traditional economic behavior model that can maintain good development in a turbulent economic environment and stabilize the current economy in special times. By analyzing this economic logic, we can help people understand a different economic model, so that they can face special times more effectively and minimize the negative impact of a turbulent economy.
+
+The article includes the following main parts:
+Introduction: Briefly explain the background, purpose, process, results, and discussion content of the article. Data: Mainly summarizes the data collection process, cleaning process, and explains the role and meaning of each variable. Model: Based on OLS analysis techniques, create a model to facilitate deeper analysis and comparison.Result: Analyze the meaning of each coefficient through the results, and then find the shortcomings and conduct additional model simulations.Discussion: Talk about the impact of the digital economy and understand its logic.
+
+
+The analysis in this article uses the R programming language(@citeR) for statistical calculations and data visualization. The tidyverse package is installed to access other important R packages(@tidyverse), including dplyr for manipulating and cleaning data, readr for reading and importing data(@R-readr), here for creating specific paths for saving files, ggplot2 for creating data visualizations(@ggplot).
+
+# Data
+
+## Main Independent and Dependaen Variable Explanation
+
+
+
+The data used in this paper focus on macroeconomic aspects, and these data can be obtained through the annual statistical yearbook provided by the National Bureau of Statistic of China.To analyze the impact of the digital economy on the physical economy and societal development during the pandemic, I collected the Consumer Price Index (CPI) as a dependent variable to measure the level of societal development which is measured as comparing with the last month, which also indirectly reflects the state of the physical economy.The reason I chose the CPI to represent the physical economy is because CPI can well reflect the Price level which represent the real economy. And I had tried using some physical economic indicators, such as industrial output and services sector data.However, due to the diversity of policies during the pandemic, the data on the physical economy showed unusually high volatility, causing excessive endogeneity problems that affected the accuracy of the analysis. Therefore, I used indirect data to reflect the physical economy, significantly reducing the impact of endogeneity.
+
+
+
+Furthermore, I used the number of Mobile Internet Accesses which measured in ten Thousand GB to reflect the development of the digital economy.Statistics show that with the proliferation and convenience of mobile phones, mobile internet usage accounts for 99.8% of total internet use, making it a comprehensive indicator of the digital economy.Due to home-stay policies during the pandemic, I expected a significant increase in this number over the statistical period, meaning that the socio-economic impact would not be drastically reduced by these policies.
+In collecting the data, I initially found related data collected by the World Bank, but since this data was annual and the pandemic lasted only three years, it provided too small a sample, so I abandoned it in favor of more official monthly data, which made the data more analytically valuable.The data cleaning process was straightforward since there were no missing data when I found it; I merely changed the date format to make it more official without doing much data cleaning. The change in date format was necessary because the original data used a China-centric date arrangement, like 13-June, but in R, such combinations of numeric and character data complicate the coding process, so I changed the date format to the official short date format.
+
+
+
+## Variables of Interest
+
+The choice of mobile Internet access traffic is based on one of the essential characteristics of the digital economy, namely the mobility of information and data.As an important carrier of digital economy, mobile Internet carries people's various behaviors such as information acquisition, communication and business activities.Therefore, the growth of mobile Internet access traffic not only reflects the frequency of digital economic activities, but also indirectly reflects the level of development and influence of the digital economy. In addition, with the popularization and application of mobile Internet technology, more and more people choose to surf the Internet through mobile phones and other mobile devices, which also makes mobile Internet access traffic become a suitable indicator to measure the digital economy. By monitoring and analyzing the changes in mobile Internet access traffic, the development trend and characteristics of the digital economy can be more accurately understood, and scientific basis for relevant decisions can be provided.Therefore, this paper takes mobile Internet access traffic as an indicator to measure the digital economy.In addition to the level of digital economy, a series of other factors are also involved in influencing the development level of real economy.
+
+The control variables selected in this paper are Money Supply measured in 100 Million Yuan, Cumulative Growth of Fixed Asset Investment measured in percent change, and National Fiscal Expenditure measured in 100 Million Yuan, The money supply typically reflects the state of a country's financial environment, either being loose or tight, and is a crucial factor affecting economic activity and investment decisions.Considering the money supply is essential when analyzing the impact of the digital economy on the physical economy, as it influences the purchasing power and investment capabilities of consumers and businesses.During the pandemic, monetary policy may be adjusted to address economic slowdowns, making this variable particularly critical for understanding the effects of policy changes on the economy. Fixed asset investment is a key indicator of a country's infrastructure construction and industrial expansion, reflecting the nation's investment and confidence in its economic future. Cumulative growth demonstrates the increase in investment over a period. In special times like a pandemic, changes in fixed asset investment can significantly affect the performance of the physical economy, especially in construction and industrial production.Controlling this variable helps analyze the direct impact on the physical economy and its interaction with digital economic activities.National fiscal expenditure includes government spending on public services, social security, and economic stimulus programs.During the pandemic, the government might increase fiscal spending to mitigate economic downturns and support businesses and individuals. This increase in spending can stimulate economic activity and may have positive or negative impacts on both the physical and digital economies. Understanding the scale and direction of fiscal expenditure is crucial for assessing the overall impact of government policies on economic activities during economic impact analyses.
+
+## Graph Analized
+
+The graph below(@fig-table) shows the relationship between the dependent variable and the main variable, Mobile Internet Access Traffic. The chart indicates that over time, an increase in Mobile Internet Access does not lead to a rise in the CPI; instead, they appear to have an inverse relationship. I speculate that this is because there are many factors in society that affect the CPI, such as pandemic policies that restrict consumption, which may cause the CPI to decline.In comparison, the positive impact of Mobile Internet Access on the economy may not be sufficient to offset the negative effects produced by other factors. The influence of other individual variables on the CPI is similar.
+
+```{r}
+#| label: fig-table
+#| fig-cap: Relationship between CPI and Mobile Internet Access Traffic
+#| echo: false
+
+data <- read.csv("/cloud/project/data/analysis_data/Cleaned_data.csv")
+
+data$Month <- as.Date(data$Month, format = "%Y/%m/%d")
+
+# Create a scatter plot for each independent variable against CPI
+variables <- c("Mobile_Internet_Access_Traffic" 
+              )
+
+plots <- lapply(variables, function(var) {
+  ggplot(data, aes(x = !!sym(var), y = Consumer_Price_Index)) +
+    geom_point(alpha = 0.6) +  # Scatter points with slight transparency
+    geom_smooth(method = "lm", formula = y ~ x, se = FALSE, color = "blue") +  # Explicit formula
+    labs(title = paste("Relationship between CPI and", var),
+         x = var, 
+         y = "Consumer Price Index") +
+    theme_minimal()
+})
+
+# Print all plots
+for (plot in plots) {
+  print(plot)
+}
+```
+
+Among which only National Fiscal Expenditure has a positive impact on the CPI from the table,(@fig-table1)I expect that government spending during the pandemic is a primary means of market regulation. Due to the restrictions imposed by pandemic policies, both consumption and output, as indicated by GDP composition, are to some extent constrained. However, government spending operates independently of the production factors of the people, thus exerting a broader influence on CPI. However, as discussed above, conclusions cannot be drawn from a single element alone; therefore, more variables will be included in the following analysis.
+
+```{r}
+#| label: fig-table1
+#| fig-cap: Relationship between CPI and National Fiscal Expenditure
+#| echo: false
+
+data <- read.csv("/cloud/project/data/analysis_data/Cleaned_data.csv")
+
+data$Month <- as.Date(data$Month, format = "%Y/%m/%d")
+
+# Create a scatter plot for each independent variable against CPI
+variables <- c("National_Fiscal_Expenditure" 
+              )
+
+plots <- lapply(variables, function(var) {
+  ggplot(data, aes(x = !!sym(var), y = Consumer_Price_Index)) +
+    geom_point(alpha = 0.6) +  # Scatter points with slight transparency
+    geom_smooth(method = "lm", formula = y ~ x, se = FALSE, color = "blue") +  # Explicit formula
+    labs(title = paste("Relationship between CPI and", "National Fiscal Expenditure"),
+         x = var, 
+         y = "Consumer Price Index") +
+    theme_minimal()
+})
+
+# Print all plots
+for (plot in plots) {
+  print(plot)
+}
+```
+
+# Model
+
+## Model set-up
+
+Firstly, to isolate the direct impact of the digital economy on the real economy or social development from other factors, I will set CPI as the dependent variable and Mobile Internet Access as the sole independent variable. This model will include an error term, and other basic factors to construct a simple linear regression. The purpose is to examine whether the digital economy has a buffering effect on China's negative economic situation during the COVID-19 pandemic through a direct relationship(@xu2022impact). Therefore, this part will hypothesize that during the COVID-19 pandemic, the development of the digital economy can provide new growth points for the real economy, mitigating the negative impact of the pandemic on the real economy and and it directly impacts the CPI, holding the effect of time constant.The basic model will be:
+
+$$
+CPI = \beta_0 + \beta_1*MIA + \epsilon
+$$ 
+
+In this model, CPI represents the Consumer Price Index and serves as the dependent variable.
+MIA stands for Mobile Internet Access, representing the activity level of the digital economy, and is the independent variable. The term $\beta_0$is the constant, which represents the expected value of CPI when MIA is zero. $\beta_1$ is the slope, indicating the average change in CPI for a one-unit change in MIA.
+$\epsilon$ represents the error term, which accounts for the effects on CPI from all other factors besides MIA.Based on the model, I assume there is a linear relationship between CPI index and MIA, and also there is no correlation between MIA and error term with no lurking variable exists.I expect there is a positive effect between MIA and CPI which means the increase of MIA usage, could stabilize the economy during Covid19.This hypothesis is based on the strict COVID-19 policies during the pandemic that forced a portion of the physical economy to transition online. Therefore, I expect that there would certainly be an increase in the usage of mobile traffic(@zhang2019china). The commercial activities driven by this increased traffic are anticipated to act as a hedge, providing a degree of stabilization to the economic output that would have otherwise declined due to stay-at-home policies.
+ 
+
+Indeed, the factors influencing the Consumer Price Index (CPI) are numerous, especially during the pandemic when additional uncertainties make the application of linear regression more limited. For example, the assumptions made in a linear regression analysis cannot completely rule out the possibility that the correlation between the independent variables and the error term could significantly impact the CPI. These assumptions may overlook various external factors, possibly leading to inaccuracies in the analysis.(@hausman1999cellular) Although it is impossible to guarantee the exclusion of all external influences, it is planned to incorporate a variety of control variables into a multiple regression analysis to further assess the role of the digital economy on the real economy during the pandemic. This could significantly reduce the impact of externalities. These control variables have been chosen because national fiscal expenditure and the money and quasi-money supply are among the most effective ways to stimulate the economy during periods of economic contraction due to the pandemic. They impact the CPI without unduly influencing the digital economy, while fixed asset investment reflects the state of the real economy, and time is especially important during periods of fluctuating pandemic policies. The new multiple regression model will be:
+
+However, we are aware that many factors affect the CPI, especially during the pandemic when more uncertainties limit the effectiveness of linear regression. For instance, in the assumptions of the linear regression, I cannot eliminate the possibility that the correlation between the independent variables and the error term could significantly affect the CPI. This assumption ignores many external factors, potentially leading to inaccuracies in the analysis. Although we cannot ensure the exclusion of all external influences, my plan is to add other control variables that can be considered in a multiple regression to further analyze the impact of the digital economy on the real economy during the pandemic, which could greatly reduce the impact of externalities. These will include National Fiscal Expenditure, Money and Quasi Money Supply, Cumulative Growth of Fixed Asset Investment, and a time variable(@nguyen2019impact). These control variables were chosen because national fiscal expenditure and the supply of money and quasi-money are among the most effective economic stimuli during a pandemic-induced economic contraction. They influence the CPI but do not overly affect the digital economy. Fixed asset investment can reflect the state of the real economy, and time is particularly important during the fluctuations of pandemic policies. The new multiple regression model will include:
+$$
+CPI_t = \beta_0 + \beta_1*MIA_t +\beta_2*COVID_t +\beta_3X_{t} +\beta_4X_{2t}
++ \beta_5X_{3t}+ \epsilon
+$$ 
+In multiple regression, $\beta_0$ serves as the constant term, consistent with its role in linear regression, while $\beta_1$ to $\beta_5$ represent the estimated coefficients for each variable. These coefficients signify the expected impact on the CPI for a one-unit change in the respective variable, holding all other variables constant. The terms $X$ o $X_3$ represent the three newly added control variables that also vary with time t. I expect that even after the inclusion of additional variables, the growth in mobile internet usage will continue to have a significant impact on the CPI. This assumption is based on my belief that the economic transition during the pandemic was characterized by a shift from the real economy to the digital economy, and thus the addition of new variables will not diminish the impact brought about by the digital economy. However, given that both the money supply and government expenditures can actively stabilize the economy, it is expected that the coefficient reflecting the impact of the digital economy on the CPI will decrease to a certain extent.
+
+
+
+# Result
+## Linear Regression Analyze 
+```{r}
+#| label: fig-table3
+#| fig-cap: Linear regression for API and MIA
+#| echo: false
+#| warning: false
+#| message: false
+
+data <- read_csv("/cloud/project/data/analysis_data/Cleaned_data.csv")
+model <- lm(Consumer_Price_Index ~ Mobile_Internet_Access_Traffic, data = data)
+options(show.signif.stars = FALSE)
+ft <- as_flextable(model)
+ft %>% autofit() %>% fit_to_width(6)
+
+
+```
+The results of the first linear regression are summarized in (@fig-table3)，The results of the linear regression suggest that there is a significant relationship between mobile internet access traffic and the Consumer Price Index (CPI), with mobile traffic having a noticeable and statistically significant impact. The p-value, which is approximately zero, indicates that the effect of increased mobile internet usage on the CPI coefficient is significant. Looking at the coefficient estimate and t-value, we can see that an increase in mobile internet usage has a significantly negative impact on the CPI in this isolated context.
+
+
+The CPI coefficient represents the level of domestic goods and service prices(@hausman1999cellular). As the CPI coefficient decreases, domestic consumption diminishes and prices drop. While economic contraction can reduce the gross production value in the long term, in the short term, it can also lower the inflation rate and increase the value of money, which can promote economic development. Therefore, the relationship between mobile internet usage and the CPI in a solitary environment must be measured over time. 
+
+```{r}
+#| label: fig-table4
+#| fig-cap: Linear regression for API and MIA
+#| echo: false
+#| warning: false
+#| message: false
+
+data <- read_csv("/cloud/project/data/analysis_data/Cleaned_data.csv")
+
+ggplot(data, aes(x = Mobile_Internet_Access_Traffic, y = Consumer_Price_Index)) + 
+  geom_point() +
+  stat_smooth(method = "lm", col = "black")
+```
+
+According to the above points chart(@fig-table4), because the data selects 36 months of data related to the epidemic, it can be seen as a long-term impact. From this perspective, the results of linear regression reject the previous conjecture. If the situation that leads to increased mobile usage (such as a pandemic) persists for an extended period, the economy could remain in a state of contraction, which could slow down social development. Conversely, if the situation is short-lived, the decrease in the inflation rate and the consequent rise in the value of money could benefit social development. In addition, as can be seen from the dot plot, this analysis cannot fully explain this In this case, because the gray area representing the confidence interval represents the possible degree of change, the model's prediction is not accurate. According to this situation, other control variables will be substituted for analysis.
+
+## Multiple Analyzed for API and MIA with control variable
+```{r}
+#| label: fig-table5
+#| fig-cap: Multiple regression for API and all variable
+#| echo: false
+#| warning: false
+#| message: false
+
+data <- read_csv("/cloud/project/data/analysis_data/Cleaned_data.csv")
+
+model <- lm(Consumer_Price_Index ~ Mobile_Internet_Access_Traffic + Month + National_Fiscal_Expenditure + Money_and_Quasi_Money_Supply + Cumulative_Growth_of_Fixed_Asset_Investment, data = data)
+options(show.signif.stars = FALSE)
+ft <- as_flextable(model)
+ft %>% autofit() %>% fit_to_width(6)
+
+
+```
+
+```{r}
+#| label: fig-table6
+#| fig-cap: Correction between National Fiscal Expenditure and Money supply
+#| echo: false
+#| warning: false
+#| message: false
+
+data <- read_csv("/cloud/project/data/analysis_data/Cleaned_data.csv")
+
+correlation_result <- cor(data$`National_Fiscal_Expenditure`, data$`Money_and_Quasi_Money_Supply`, use = "complete.obs")
+
+
+ggplot(data, aes(x = National_Fiscal_Expenditure, y = Money_and_Quasi_Money_Supply)) + 
+  geom_point() +
+  stat_smooth(method = "lm", col = "black")
+
+```
+It can be seen from the results of multiple analysis that after adding control indicators(@fig-table5), the impact of all major averages on CPI is no longer significant, and some impact trends are in line with previous guesses. For example, money supply and government expenditure both have normal coefficients and t Therefore, they all have a positive impact on CPI, but the impact is not significant. The impact of mobile traffic usage on CPI becomes smaller with the addition of control variables. But all the changes went beyond expectations, as even the most critical impact on mobile data usage was no longer significant. My first guess was that it was a lock collinearity problem. Because both money supply and government spending have a direct impact on GDP, I suspect that these two factors have too high a correlation, which affects the accuracy of the model. Based on this, I performed a correlation test to test how relevant they are. 
+
+
+
+The correction result is -0.092. This result(@fig-table6)shows that there is no obvious correlation between government expenditure and money supply, and therefore refutes the previous guess. If the collinearity problem is eliminated, I attribute the lack of obvious impact of the digital economy to The digital economy does not have as significant an impact on the real economy as I imagined. The possible reason is that it takes time for the development of the digital economy to affect the real economy, so it is difficult to see from the results the impact of the increase in mobile traffic usage on current prices. On the other hand, it may be that due to the complex economic dynamics during the epidemic, each variable has lost its original linear relationship. In order to verify this conjecture, I made another model about log multiple to verify my conjecture.
+
+## Log multiple model
+
+```{r}
+#| label: fig-table7
+#| fig-cap: Log Multiple regression for API and all variable
+#| echo: false
+#| warning: false
+#| message: false
+
+data <- read_csv("/cloud/project/data/analysis_data/Cleaned_data.csv")
+
+
+
+model_log <- lm(log(Consumer_Price_Index) ~ log(Mobile_Internet_Access_Traffic) + 
+                                          log(National_Fiscal_Expenditure) + 
+                                          log(Money_and_Quasi_Money_Supply) + 
+                                          log(Cumulative_Growth_of_Fixed_Asset_Investment), data = data)
+options(show.signif.stars = FALSE)
+ft <- as_flextable(model_log)
+ft %>% autofit() %>% fit_to_width(6)
+
+
+```
+According to the table(@fig-table7), the results after log are consistent with all previous conjectures. First of all, the function of log linear is to avoid that there is no effective linear relationship between variables, and any exponential relationship will approach a linear relationship after being logged, thus avoiding related problems. It can be seen from the data that after adding control variables, there is a negative and significant correlation between the use of mobile traffic and CPI. In line with previous conjectures, the increase in mobile phone data usage has reduced the price level and increased money value, thereby stabilizing the negative impact of the epidemic on the market. The growth of fixed asset investment and national expenditure also have a positive and significant correlation with the impact on CPI, which is in line with the previous conjecture.However, the increase in money supply did not significantly affect the CPI coefficient, which is inconsistent with speculation. The reason is that the market shrank during the epidemic, causing the role of money supply to conflict with the epidemic policy. For example, the purpose of money supply itself is to stimulate the market, but due to the epidemic policy, people have to stay at home and reduce consumption. As a result, money supply cannot play its original role and has no significantly affected the CPI coefficient.
+
+
+# Discussion
+
+## General Discussion for the Paper
+This article uses the OLS analysis method to mainly analyze whether the digital economy will have a positive impact on the real economy during the epidemic in China and thus play a role in stabilizing the economy during the epidemic. All the data in the article come from the National Bureau of Statistic of China, the official data website of China, which proves the officialness and authenticity of the data, because the data itself is very complete, and the data cleaning process only includes improving the composition of time to make it easier to analyze the data. Better use in the process. This article chooses CPI as the dependent variable because CPI summarizes the changes in domestic price index. It can not only reflect changes in consumption levels, but also judge long-term and short-term impacts based on simple inferences, thus proving whether the use of mobile data clearly affects Stabilize the economic level and promote the real economy. Then choose mobile traffic usage as the main independent variable, because according to statistics, 99% of society's traffic usage comes from mobile phones, and choosing changes in mobile phone traffic can reasonably reflect the digital economy. Using money supply, the growth of fixed asset investment, time and government expenditures are used as other control variables to reduce errors caused by external factors. The article first uses linear regression analysis techniques to verify whether the increase in data traffic usage will directly affect the CPI coefficient in a single environment. The results show that the use of mobile traffic will have a significant negative impact on CPI, and because in the short term, the decline in CPI will effectively reduce inflation and increase the value of money, so in a single environment, CPI will indeed stabilize the negative impact of epidemic policies. 
+
+However, since the analysis role of a single environment is very limited, assumptions about data analysis techniques and more uncertainties during the epidemic will indirectly affect the relationship between CPI and various control variables. Therefore, this article focuses on substituting other control variables and time factors, and uses multiple linear method to analyze the impact of each factor after adding control variables to reduce the endogenous problem. The results refuted all speculations. Although the change trend was in line with predictions, all data did not significantly affect the CPI index. The article first suspected that the correlation between two control variables was too high, which caused the multicollinearity problem. Therefore, correction analysis was used to test the two data that were most likely to cause multicollinearity problems, money supply and government expenditures. The results showed that, The correlation between the two variables is -1.92, and there is no multicollinearity problem as imagined. Therefore, the article infers that it is due to overly complex epidemic policies that there is no obvious linear relationship between various factors, resulting in excessive errors. Therefore, the article uses the log method, aiming to make the exponential trend closer to a linear trend. This process is very effective, and all variables except money supply have a significant impact on CPI. The insignificant reason for money supply is speculated to be the market shrank during the epidemic, causing the role of money supply to conflict with the epidemic policy.
+
+The article ultimately found that the digital economy will indeed stabilize the economic contraction caused by the epidemic in the short term by improving the inflation rate, lowering interest rates, and increasing the value of currency. But if this stage lasts too long, the economy will fall into a state of contraction for a long time. It will bring about a severe economic recession.
+
+## Constructing understanding of social economy: During special period
+
+We have all just experienced the epidemic and felt the pessimism and social unrest caused by the epidemic. Therefore, excluding other factors, it will become very important to understand the social status during special periods and make the most correct decisions to minimize the impact of uncertainty on oneself during special periods. This article is based on the digital economy. By analyzing the impact of the digital economy on various factors during the epidemic, it can help people build their economic understanding of the special period to a certain extent. 
+
+First of all, under normal circumstances, society develops normally and CPI tends to grow positively. The goods and services in the CPI basket are divided into 8 main components. They roughly include all people's daily needs and entertainment, so changes in CPI are closer to people's lives than GPD and will not be too macroscopic. Although there are many factors that affect CPI, some of the most critical factors are currency value, people's consumption, and inflation. In almost all special economic periods, the originally growing CPI will have a significant downward or slowing trend. We can then analyze the upcoming changes in the social economy and respond better. First of all, the falling CPI depends to a large extent on the reduction of people's consumption, because consumption itself will be based on people's confidence. In special times, as people become uncertain about the future, most people will hold currency to cope with the uncertainty, which leads to a reduction in consumption. Many people believe that reduced consumption will cause economic contraction and a decline in social and economic levels. This statement itself is correct, but it will only occur if it is based on long-term effects. In the short-term impact, the reduction in people's consumption will first bring about the decline in interest rates. The government, as the department that has the highest priority to deal with special times, will adjust interest rates and implement loose monetary policies as soon as possible, thereby prompting people to take loans and invest to restore the economy. However, in special periods, the effectiveness of monetary policy will be greatly reduced because confidence is the factor that most affects consumption levels, not currency. As interest rates fall, inflation levels will also slowly decrease. These factors have the effect of stabilizing the social economy in the short term. But as mentioned in the previous statement, the decline in CPI and consumption levels will bring about a serious economic contraction in the long term. In this state, various factors will significantly reduce the level. For example, less consumption will reduce social demand, industry will produce less, and the unemployment rate will increase significantly. As a result, society becomes more turbulent, the number of homeless people increases, people's welfare decreases, and so on. At this time, government policy participation is very much needed to improve the economic level.　Government policy support will serve as the main signal, reflecting that the social economy is about to recover. People's decision-making can also play the greatest role at this point in time, because as various indices decrease, economic behaviors such as lending, investment, etc. will be strongly supported by policies.　Based on this economic operation logic, we can discover why the digital economy emerged during the epidemic and even reached a level that can stabilize the social economy. The reason is that, contrary to the traditional economic model, it has the effect of reducing CPI and forcing people to stay at home without affecting consumption capacity. Therefore, related economic behaviors can also play a similar role in special periods.
+
+## Analysis of anti-traditional economic or behavioral model
+
+The article mentioned that anti-traditional economic behavior has a certain hedging function in special times to protect one's own interests from being overly negatively affected by turmoil. First of all, how can the digital economy play a hedging effect in special times? According to the above analysis, during special periods, the economy shrinks and consumer demand declines. But the digital economy can develop well in this environment. Firstly, because the digital economy facilitates remote working, allowing businesses to maintain operations despite lockdowns or social distancing measures. This reduces operating costs and ensures balance of payments. Secondly, people's behavior patterns change drastically during special periods. Digital platforms provide real-time data analysis, allowing companies to quickly respond to changing consumer behaviors and achieve a stabilizing effect. Similarly, some products or behaviors have the same logical model as the digital economy and can remain stable in a turbulent economy. First of all, Online Education is one of the most important emerging anti-traditional behavioral models. Under traditional circumstances, people believe that face-to-face teaching in schools will make education more effective to the greatest extent. However, during the epidemic, online education, on the contrary, has developed rapidly.
+Depending on the necessity of education, economic instability does not affect people's expectations of the importance of education. Therefore, in order to meet the needs of people to obtain a stable and good education despite the ever-changing policies, Online Education has emerged. Teachers teach and convey assignments and requirements through the Internet. Students complete their studies as required. Therefore, Online Education can be regarded as an anti-traditional industry.Secondly, some products also have the same characteristics, such as wine. While demand for all other goods will decrease as the economy shrinks, the wine industry is the opposite of traditional industries. The more turbulent the economic environment, the higher the demand for wine land.
+
+## Weaknesses and next steps
+All models are imperfect, and there are many biases in the analysis of this film that may lead to many errors. First, the sample size is not large enough to fully meet the data analysis requirements. This is not improved in the article because my data depends on the time of the epidemic, and the period of maximum fluctuation in epidemic policies lasted for about two years. Due to the periodicity of statistical data, data in days cannot be found. Therefore, we have to use the unit of month, and assume that errors caused by sample size will not affect the overall analysis of the article.
+
+Secondly, this article does not completely solve the problem of exogenous bias. This analysis faces a serious exogenous problem, because during the epidemic, the interaction between various factors may change abnormally, and the relationship between various factors may also change. The analysis in the article cannot solve this problem, so I just started from the control variable and added the most likely relevant control variables to minimize the impact of the exogenous problem.
+
+Secondly, causality bias is not taken into account. I just assumed that the use of collected traffic will affect the CPI coefficient during the epidemic, but I am not sure who specifically affected whom. In this case, it is also very likely that the decline in the CPI coefficient, the reduction in people's needs, and the reduction in work efficiency have led to people starting to use mobile phones too much. To solve this problem, you can use the control variable method, which aims to ensure that the CPI or mobile phone usage remains unchanged as much as possible through randomization, and change other variables to observe changes. But it is difficult to achieve in the context of this film analysis. Therefore, this article is still accompanied by possible causality issues.
+
+In order to improve this analysis, I think we must first start with the analysis method. OLS analysis method is not enough to fully explore the relationship between mobile phone traffic usage and CPI. Therefore, for future work, I will use the difference in difference analysis method to analyze the impact before and after the epidemic. By comparing data differences before and after the epidemic, uncertainties caused by social unrest can be avoided to a certain extent. For example, if the changes before and after the epidemic are similar, then a large part of the impact caused by social unrest can be eliminated, thereby reducing the error caused by exogenous bias. Through this comparison method, the time span can also be increased to add more samples to solve the error caused by insufficient sample size. In addition to the analysis method, I also need to add more control variables to improve this analysis. Because the CPI coefficient is too macroscopic, there are many factors that affect it. This article only summarizes the impact of currency, fixed assets, and government expenditure, and is not enough to fully summarize the CPI coefficient. More control variables can also solve the endogenous problem to a certain extent.
+
+# References
